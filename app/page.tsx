@@ -1,460 +1,362 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Scissors,
-  Menu,
-  X,
-  Star,
-  Clock,
-  MapPin,
-  Phone,
-  Mail,
-  Instagram,
-  ChevronLeft,
-  ChevronRight,
-  Sparkles,
-  Award,
-  Users,
-  Calendar,
-} from "lucide-react";
+import { useState } from 'react'
+import Image from 'next/image'
+import { X, Menu, Scissors, Clock, MapPin, Star, ChevronLeft, ChevronRight, Phone, Mail, Instagram, Facebook, Twitter, Sparkles, Users, Award, Calendar } from 'lucide-react'
 
-const navLinks = [
-  { label: "Services", href: "#services" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Team", href: "#team" },
-  { label: "Contact", href: "#contact" },
-];
+export default function HomePage() {
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [promoDismissed, setPromoDismissed] = useState(false)
+  const [testimonialIndex, setTestimonialIndex] = useState(0)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    service: '',
+    date: '',
+    time: '',
+    notes: ''
+  })
 
-const services = [
-  {
-    title: "Classic Cut",
-    description: "Precision haircut tailored to your style and face shape",
-    price: "From $25",
-    icon: Scissors,
-  },
-  {
-    title: "Fade Specialist",
-    description: "Seamless gradients from skin to length, any style",
-    price: "From $30",
-    icon: Sparkles,
-  },
-  {
-    title: "Beard Sculpting",
-    description: "Sharp lines and expert shaping for the perfect beard",
-    price: "From $15",
-    icon: Award,
-  },
-  {
-    title: "Hot Towel Shave",
-    description: "Old school luxury with a straight razor finish",
-    price: "From $35",
-    icon: Star,
-  },
-  {
-    title: "Kids Cut",
-    description: "Patient service for the next generation of fresh cuts",
-    price: "From $18",
-    icon: Users,
-  },
-  {
-    title: "The Full Experience",
-    description: "Haircut, beard trim, hot towel, and styling products",
-    price: "From $55",
-    icon: Calendar,
-  },
-];
+  const services = [
+    { name: 'Classic Fade', description: 'Precision fade with clean lines and sharp edges', duration: '45 min', icon: Scissors },
+    { name: 'Beard Sculpt', description: 'Expert beard shaping and grooming with hot towel finish', duration: '30 min', icon: Sparkles },
+    { name: 'The Full Experience', description: 'Haircut, beard trim, and signature scalp massage', duration: '90 min', icon: Award },
+    { name: 'Kids Cut', description: 'Patient and precise cuts for the young ones', duration: '30 min', icon: Users },
+  ]
 
-const teamMembers = [
-  {
-    name: "Master Barber",
-    specialty: "Fades & Precision Cuts",
-    initials: "MB",
-    color: "bg-[#39FF14]",
-    textColor: "text-[#0A0A0A]",
-  },
-  {
-    name: "Senior Stylist",
-    specialty: "Creative Designs & Textures",
-    initials: "SS",
-    color: "bg-white",
-    textColor: "text-[#0A0A0A]",
-  },
-  {
-    name: "Beard Specialist",
-    specialty: "Shaves & Beard Grooming",
-    initials: "BS",
-    color: "bg-[#6B6B6B]",
-    textColor: "text-white",
-  },
-  {
-    name: "Junior Barber",
-    specialty: "Classic Cuts & Styling",
-    initials: "JB",
-    color: "bg-[#39FF14]",
-    textColor: "text-[#0A0A0A]",
-  },
-];
+  const testimonials = [
+    { text: "Best barbershop in the city. The attention to detail is unmatched. I have been coming here for two years and never looked back.", rating: 5 },
+    { text: "Finally found a place that gets my style. The vibe is incredible and the cuts are even better. Highly recommend the Full Experience.", rating: 5 },
+    { text: "Clean shop, skilled barbers, great music. What more could you ask for? My go to spot every two weeks.", rating: 5 },
+    { text: "The team here actually listens to what you want. Left feeling like a new man. Will definitely be back.", rating: 5 },
+  ]
 
-const testimonials = [
-  {
-    quote:
-      "Best fade I've ever had. These guys know what they're doing. The vibe in here is unmatched.",
-    author: "Regular Client",
-    initials: "RC",
-  },
-  {
-    quote:
-      "Finally found a shop that gets my style. Clean cuts, good music, great conversation.",
-    author: "First Time Visitor",
-    initials: "FT",
-  },
-  {
-    quote:
-      "Been coming here for months. Consistent quality every single time. Highly recommend.",
-    author: "Loyal Customer",
-    initials: "LC",
-  },
-];
+  const pricingTiers = [
+    { name: 'Essential', services: ['Classic Haircut', 'Neck Cleanup', 'Style Finish'], price: 'From $35' },
+    { name: 'Premium', services: ['Fade of Choice', 'Beard Line Up', 'Hot Towel', 'Product Styling'], price: 'From $55', featured: true },
+    { name: 'VIP', services: ['The Full Experience', 'Scalp Treatment', 'Complimentary Beverage', 'Priority Booking'], price: 'From $85' },
+  ]
 
-const stats = [
-  { value: "5000+", label: "Fresh Cuts" },
-  { value: "4.9", label: "Star Rating" },
-  { value: "10+", label: "Years Combined Experience" },
-  { value: "100%", label: "Satisfaction Guaranteed" },
-];
+  const galleryImages = [
+    { src: '/images/hero.png', alt: 'Precision fade haircut' },
+    { src: '/images/feature.png', alt: 'Beard grooming session' },
+    { src: '/images/hero.png', alt: 'Modern barbershop interior' },
+    { src: '/images/feature.png', alt: 'Client transformation' },
+    { src: '/images/hero.png', alt: 'Detailed line work' },
+    { src: '/images/feature.png', alt: 'Premium styling products' },
+  ]
 
-export default function Home() {
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const navLinks = [
+    { name: 'Services', href: '#services' },
+    { name: 'About', href: '#about' },
+    { name: 'Gallery', href: '#gallery' },
+    { name: 'Pricing', href: '#pricing' },
+    { name: 'Book Now', href: '#booking' },
+    { name: 'Locations', href: '#locations' },
+  ]
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    alert('Booking request submitted! We will contact you shortly to confirm.')
+  }
 
   const nextTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-  };
+    setTestimonialIndex((prev) => (prev + 1) % testimonials.length)
+  }
 
   const prevTestimonial = () => {
-    setCurrentTestimonial(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length
-    );
-  };
+    setTestimonialIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  }
 
   return (
-    <main className="min-h-screen bg-[#0A0A0A] text-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A]/95 backdrop-blur-sm border-b border-[#2A2A2A]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <a
-              href="#"
-              className="flex items-center gap-2 font-bold text-xl tracking-tight"
-              style={{ fontFamily: "var(--font-space-grotesk)" }}
-            >
-              <Scissors className="w-6 h-6 text-[#39FF14]" />
-              <span>
-                THE CUT <span className="text-[#39FF14]">LAB</span>
-              </span>
-            </a>
-
-            {/* Desktop Nav */}
-            <div className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm font-medium text-[#6B6B6B] hover:text-white transition-colors"
-                >
-                  {link.label}
-                </a>
-              ))}
-              <Button
-                asChild
-                className="bg-[#39FF14] text-[#0A0A0A] hover:bg-[#39FF14]/90 font-semibold"
-              >
-                <a href="#contact">Book Now</a>
-              </Button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2"
-              onClick={() => setMobileNavOpen(!mobileNavOpen)}
-              aria-label="Toggle menu"
-            >
-              {mobileNavOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Nav Panel */}
-        <div
-          className={`md:hidden absolute top-16 left-0 right-0 bg-[#0A0A0A] border-b border-[#2A2A2A] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            mobileNavOpen
-              ? "opacity-100 translate-y-0 pointer-events-auto"
-              : "opacity-0 -translate-y-4 pointer-events-none"
-          }`}
+    <main className="min-h-screen" style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF' }}>
+      {/* Promo Banner */}
+      {!promoDismissed && (
+        <div 
+          className="sticky top-0 z-50 py-3 px-4 flex items-center justify-center gap-4 relative"
+          style={{ backgroundColor: '#1A1A1A', borderBottom: '1px solid #39FF14' }}
         >
-          <div className="px-4 py-4 flex flex-col gap-4">
-            {navLinks.map((link, index) => (
+          <p className="text-sm md:text-base font-medium text-center">
+            <span style={{ color: '#39FF14' }}>★</span> First cut FREE for new clients
+          </p>
+          <a
+            href="#booking"
+            className="px-4 py-1.5 text-sm font-bold rounded-full transition-all hover:scale-105"
+            style={{ backgroundColor: '#39FF14', color: '#0A0A0A' }}
+          >
+            Book Now
+          </a>
+          <button
+            onClick={() => setPromoDismissed(true)}
+            className="absolute right-4 p-1 hover:opacity-70 transition-opacity"
+            aria-label="Dismiss promo"
+          >
+            <X size={18} style={{ color: '#888888' }} />
+          </button>
+        </div>
+      )}
+
+      {/* Sticky Navigation */}
+      <nav 
+        className={`sticky ${promoDismissed ? 'top-0' : 'top-[52px]'} z-40 py-4 px-6 md:px-12 transition-all`}
+        style={{ backgroundColor: '#0A0A0A', borderBottom: '1px solid #1A1A1A' }}
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <a href="#" className="text-2xl font-bold tracking-tight" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+            EDGE<span style={{ color: '#39FF14' }}>.</span>STUDIO
+          </a>
+
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
               <a
-                key={link.href}
+                key={link.name}
                 href={link.href}
-                onClick={() => setMobileNavOpen(false)}
-                className="text-lg font-medium text-[#6B6B6B] hover:text-white transition-all duration-300"
-                style={{
-                  transitionDelay: mobileNavOpen ? `${index * 60}ms` : "0ms",
-                }}
+                className="text-sm font-medium hover:opacity-100 transition-opacity"
+                style={{ color: link.name === 'Book Now' ? '#39FF14' : '#FFFFFF', opacity: link.name === 'Book Now' ? 1 : 0.8 }}
               >
-                {link.label}
+                {link.name}
               </a>
             ))}
-            <Button
-              asChild
-              className="bg-[#39FF14] text-[#0A0A0A] hover:bg-[#39FF14]/90 font-semibold mt-2 transition-all duration-300"
-              style={{
-                transitionDelay: mobileNavOpen
-                  ? `${navLinks.length * 60}ms`
-                  : "0ms",
-              }}
-            >
-              <a href="#contact" onClick={() => setMobileNavOpen(false)}>
-                Book Now
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileNavOpen(!mobileNavOpen)}
+            className="md:hidden p-2"
+            aria-label="Toggle menu"
+          >
+            <Menu size={24} style={{ color: '#39FF14' }} />
+          </button>
+        </div>
+
+        {/* Mobile Nav */}
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-500 ${
+            mobileNavOpen ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <div className="flex flex-col gap-4 py-4">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={() => setMobileNavOpen(false)}
+                className="text-lg font-medium py-2 border-b transition-colors"
+                style={{ 
+                  color: link.name === 'Book Now' ? '#39FF14' : '#FFFFFF',
+                  borderColor: '#1A1A1A'
+                }}
+              >
+                {link.name}
               </a>
-            </Button>
+            ))}
           </div>
         </div>
       </nav>
 
       {/* Hero Split */}
-      <section className="pt-16 min-h-screen flex items-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-0">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div className="order-2 lg:order-1">
-              <div className="inline-block px-4 py-1.5 bg-[#1A1A1A] rounded-full text-[#39FF14] text-sm font-medium mb-6">
-                Premium Urban Grooming
-              </div>
-              <h1
-                className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6"
-                style={{ fontFamily: "var(--font-space-grotesk)" }}
-              >
-                Where Precision
-                <br />
-                Meets <span className="text-[#39FF14]">Style</span>
-              </h1>
-              <p className="text-lg text-[#6B6B6B] mb-8 max-w-lg">
-                Step into The Cut Lab and experience the art of the perfect cut.
-                Our master barbers blend classic technique with modern trends to
-                craft your signature look.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-[#39FF14] text-[#0A0A0A] hover:bg-[#39FF14]/90 font-semibold text-base"
-                >
-                  <a href="#contact">Book Your Cut</a>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="border-[#2A2A2A] text-white hover:bg-[#1A1A1A] font-semibold text-base"
-                >
-                  <a href="#services">View Services</a>
-                </Button>
-              </div>
-              <div className="flex items-center gap-6 mt-10 pt-10 border-t border-[#2A2A2A]">
-                <div className="flex -space-x-2">
-                  {["RC", "FT", "LC"].map((initials, i) => (
-                    <div
-                      key={i}
-                      className="w-10 h-10 rounded-full bg-[#1A1A1A] border-2 border-[#0A0A0A] flex items-center justify-center text-xs font-bold text-[#39FF14]"
-                    >
-                      {initials}
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-4 h-4 fill-[#39FF14] text-[#39FF14]"
-                      />
-                    ))}
-                  </div>
-                  <p className="text-sm text-[#6B6B6B]">
-                    Trusted by thousands of clients
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2 relative">
-              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
-                <Image
-                  src="/images/hero.png"
-                  alt="The Cut Lab barbershop interior"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/60 via-transparent to-transparent" />
-              </div>
-              <div className="absolute -bottom-4 -left-4 bg-[#1A1A1A] border border-[#2A2A2A] rounded-xl p-4 hidden sm:block">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-[#39FF14] flex items-center justify-center">
-                    <Scissors className="w-6 h-6 text-[#0A0A0A]" />
-                  </div>
-                  <div>
-                    <p className="font-bold text-lg">10+ Years</p>
-                    <p className="text-sm text-[#6B6B6B]">Combined Experience</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <section className="min-h-[90vh] grid md:grid-cols-2 gap-0">
+        <div className="flex flex-col justify-center px-8 md:px-16 py-16 md:py-0 order-2 md:order-1">
+          <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
+            PREMIUM GROOMING EXPERIENCE
+          </p>
+          <h1 
+            className="text-5xl md:text-7xl font-bold leading-tight mb-6"
+            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+          >
+            Sharp Cuts.
+            <br />
+            <span style={{ color: '#39FF14' }}>Bold Style.</span>
+          </h1>
+          <p className="text-lg mb-8 max-w-md" style={{ color: '#888888' }}>
+            Where precision meets personality. Step into our studio and leave looking like the best version of yourself.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <a
+              href="#booking"
+              className="px-8 py-4 text-center font-bold text-lg rounded-full transition-all hover:scale-105 hover:shadow-lg"
+              style={{ backgroundColor: '#39FF14', color: '#0A0A0A' }}
+            >
+              Book Your Slot
+            </a>
+            <a
+              href="#services"
+              className="px-8 py-4 text-center font-bold text-lg rounded-full border-2 transition-all hover:bg-white hover:text-black"
+              style={{ borderColor: '#FFFFFF' }}
+            >
+              View Services
+            </a>
           </div>
+        </div>
+        <div className="relative min-h-[400px] md:min-h-full order-1 md:order-2">
+          <Image
+            src="/images/hero.png"
+            alt="Premium barbershop experience"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div 
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(to right, #0A0A0A 0%, transparent 30%)' }}
+          />
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-20 lg:py-32 bg-[#0A0A0A]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Services Cards */}
+      <section id="services" className="py-24 px-8 md:px-16" style={{ backgroundColor: '#1A1A1A' }}>
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-[#39FF14] text-sm font-medium uppercase tracking-wider mb-4">
-              What We Offer
+            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
+              WHAT WE OFFER
             </p>
-            <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold"
-              style={{ fontFamily: "var(--font-space-grotesk)" }}
+            <h2 
+              className="text-4xl md:text-5xl font-bold"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
               Our Services
             </h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <div className="grid md:grid-cols-2 gap-6">
             {services.map((service, index) => (
-              <Card
-                key={index}
-                className="bg-[#1A1A1A] border-[#2A2A2A] hover:border-[#39FF14]/50 transition-colors group"
-              >
-                <CardContent className="p-6">
-                  <div className="w-12 h-12 rounded-lg bg-[#39FF14]/10 flex items-center justify-center mb-4 group-hover:bg-[#39FF14]/20 transition-colors">
-                    <service.icon className="w-6 h-6 text-[#39FF14]" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">{service.title}</h3>
-                  <p className="text-[#6B6B6B] mb-4">{service.description}</p>
-                  <p className="text-[#39FF14] font-semibold">{service.price}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery Masonry */}
-      <section id="gallery" className="py-20 lg:py-32 bg-[#1A1A1A]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <p className="text-[#39FF14] text-sm font-medium uppercase tracking-wider mb-4">
-              Our Work
-            </p>
-            <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold"
-              style={{ fontFamily: "var(--font-space-grotesk)" }}
-            >
-              The Gallery
-            </h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div className="relative aspect-square rounded-xl overflow-hidden col-span-2 row-span-2">
-              <Image
-                src="/images/feature.png"
-                alt="Featured transformation"
-                fill
-                className="object-cover hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/80 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-4">
-                <p className="text-[#39FF14] text-sm font-medium">Featured</p>
-                <p className="text-lg font-bold">Signature Fade</p>
-              </div>
-            </div>
-            {[
-              { title: "Skin Fade", gradient: "from-[#39FF14]/20 to-[#0A0A0A]" },
-              { title: "Textured Crop", gradient: "from-[#6B6B6B]/30 to-[#0A0A0A]" },
-              { title: "Classic Taper", gradient: "from-white/10 to-[#0A0A0A]" },
-              { title: "Beard Design", gradient: "from-[#39FF14]/10 to-[#1A1A1A]" },
-            ].map((item, index) => (
               <div
-                key={index}
-                className={`relative aspect-square rounded-xl overflow-hidden bg-gradient-to-br ${item.gradient} flex items-end p-4 group cursor-pointer`}
+                key={service.name}
+                className="group p-8 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer relative overflow-hidden"
+                style={{ backgroundColor: '#0A0A0A', border: '1px solid #1A1A1A' }}
               >
-                <div className="absolute inset-0 bg-[#39FF14]/0 group-hover:bg-[#39FF14]/5 transition-colors" />
-                <div className="relative z-10">
-                  <p className="text-sm text-[#6B6B6B]">Style</p>
-                  <p className="font-bold">{item.title}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section id="team" className="py-20 lg:py-32 bg-[#0A0A0A]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <p className="text-[#39FF14] text-sm font-medium uppercase tracking-wider mb-4">
-              Meet The Crew
-            </p>
-            <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold"
-              style={{ fontFamily: "var(--font-space-grotesk)" }}
-            >
-              Our Team
-            </h2>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, index) => (
-              <div key={index} className="text-center group">
-                <div
-                  className={`w-32 h-32 mx-auto rounded-full ${member.color} flex items-center justify-center mb-4 group-hover:scale-105 transition-transform`}
-                >
-                  <span
-                    className={`text-3xl font-bold ${member.textColor}`}
-                    style={{ fontFamily: "var(--font-space-grotesk)" }}
-                  >
-                    {member.initials}
+                <div 
+                  className="absolute top-0 left-0 w-1 h-full transition-all group-hover:w-2"
+                  style={{ backgroundColor: '#39FF14' }}
+                />
+                <div className="flex items-start justify-between mb-4">
+                  <service.icon size={32} style={{ color: '#39FF14' }} />
+                  <span className="text-sm" style={{ color: '#888888' }}>
+                    <Clock size={14} className="inline mr-1" />
+                    {service.duration}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold mb-1">{member.name}</h3>
-                <p className="text-[#6B6B6B]">{member.specialty}</p>
+                <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                  {service.name}
+                </h3>
+                <p style={{ color: '#888888' }}>{service.description}</p>
+                <a 
+                  href="#booking" 
+                  className="inline-block mt-4 text-sm font-medium transition-all group-hover:translate-x-2"
+                  style={{ color: '#39FF14' }}
+                >
+                  Book this service →
+                </a>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Stats Banner */}
-      <section className="py-16 bg-[#39FF14]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <p
-                  className="text-4xl lg:text-5xl font-bold text-[#0A0A0A] mb-2"
-                  style={{ fontFamily: "var(--font-space-grotesk)" }}
+      {/* About Split */}
+      <section id="about" className="py-24 px-8 md:px-16">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          <div className="relative h-[500px] rounded-2xl overflow-hidden">
+            <Image
+              src="/images/feature.png"
+              alt="Our barbershop team"
+              fill
+              className="object-cover"
+            />
+            <div 
+              className="absolute bottom-6 left-6 right-6 p-6 rounded-xl backdrop-blur-md"
+              style={{ backgroundColor: 'rgba(26, 26, 26, 0.9)' }}
+            >
+              <div className="flex items-center gap-6">
+                <div className="text-center">
+                  <p className="text-3xl font-bold" style={{ color: '#39FF14' }}>5+</p>
+                  <p className="text-xs" style={{ color: '#888888' }}>Years</p>
+                </div>
+                <div className="w-px h-12" style={{ backgroundColor: '#888888' }} />
+                <div className="text-center">
+                  <p className="text-3xl font-bold" style={{ color: '#39FF14' }}>10K+</p>
+                  <p className="text-xs" style={{ color: '#888888' }}>Clients</p>
+                </div>
+                <div className="w-px h-12" style={{ backgroundColor: '#888888' }} />
+                <div className="text-center">
+                  <p className="text-3xl font-bold" style={{ color: '#39FF14' }}>4.9</p>
+                  <p className="text-xs" style={{ color: '#888888' }}>Rating</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
+              OUR STORY
+            </p>
+            <h2 
+              className="text-4xl md:text-5xl font-bold mb-6"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            >
+              More Than Just a Haircut
+            </h2>
+            <p className="text-lg mb-6" style={{ color: '#888888' }}>
+              Edge Studio was born from a simple belief: everyone deserves to feel confident when they walk out the door. We combine classic barbering techniques with modern style to create looks that are uniquely you.
+            </p>
+            <p className="text-lg mb-8" style={{ color: '#888888' }}>
+              Our team of skilled barbers brings together years of experience with fresh, contemporary vision. We stay ahead of trends while respecting timeless techniques that never go out of style.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#39FF14' }} />
+                <span>Premium Products</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#39FF14' }} />
+                <span>Skilled Barbers</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#39FF14' }} />
+                <span>Clean Environment</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery Grid */}
+      <section id="gallery" className="py-24 px-8 md:px-16" style={{ backgroundColor: '#1A1A1A' }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
+              OUR WORK
+            </p>
+            <h2 
+              className="text-4xl md:text-5xl font-bold"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            >
+              Gallery
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {galleryImages.map((image, index) => (
+              <div 
+                key={index} 
+                className={`relative overflow-hidden rounded-xl group ${
+                  index === 0 ? 'col-span-2 row-span-2 h-[400px] md:h-[500px]' : 'h-[200px] md:h-[240px]'
+                }`}
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4"
+                  style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' }}
                 >
-                  {stat.value}
-                </p>
-                <p className="text-[#0A0A0A]/70 font-medium">{stat.label}</p>
+                  <p className="text-sm font-medium">{image.alt}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -462,300 +364,282 @@ export default function Home() {
       </section>
 
       {/* Testimonials Carousel */}
-      <section className="py-20 lg:py-32 bg-[#1A1A1A]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 px-8 md:px-16">
+        <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-[#39FF14] text-sm font-medium uppercase tracking-wider mb-4">
-              What Clients Say
+            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
+              CLIENT REVIEWS
             </p>
-            <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold"
-              style={{ fontFamily: "var(--font-space-grotesk)" }}
+            <h2 
+              className="text-4xl md:text-5xl font-bold"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
-              Testimonials
+              What They Say
             </h2>
           </div>
+
           <div className="relative">
-            <div className="bg-[#0A0A0A] border border-[#2A2A2A] rounded-2xl p-8 lg:p-12 text-center">
+            <div 
+              className="p-8 md:p-12 rounded-2xl text-center"
+              style={{ backgroundColor: '#1A1A1A' }}
+            >
               <div className="flex justify-center mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-6 h-6 fill-[#39FF14] text-[#39FF14]"
-                  />
+                {[...Array(testimonials[testimonialIndex].rating)].map((_, i) => (
+                  <Star key={i} size={24} fill="#39FF14" style={{ color: '#39FF14' }} />
                 ))}
               </div>
-              <p className="text-xl lg:text-2xl font-medium mb-8 leading-relaxed">
-                &ldquo;{testimonials[currentTestimonial].quote}&rdquo;
+              <p className="text-xl md:text-2xl mb-8 leading-relaxed">
+                &ldquo;{testimonials[testimonialIndex].text}&rdquo;
               </p>
-              <div className="flex items-center justify-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-[#1A1A1A] flex items-center justify-center text-[#39FF14] font-bold">
-                  {testimonials[currentTestimonial].initials}
-                </div>
-                <div className="text-left">
-                  <p className="font-bold">
-                    {testimonials[currentTestimonial].author}
-                  </p>
-                  <p className="text-sm text-[#6B6B6B]">Verified Client</p>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-center gap-4 mt-8">
-              <button
-                onClick={prevTestimonial}
-                className="w-12 h-12 rounded-full border border-[#2A2A2A] flex items-center justify-center hover:border-[#39FF14] hover:text-[#39FF14] transition-colors"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <div className="flex items-center gap-2">
+              <div className="flex justify-center gap-2">
                 {testimonials.map((_, index) => (
                   <button
                     key={index}
-                    onClick={() => setCurrentTestimonial(index)}
-                    className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                      index === currentTestimonial
-                        ? "bg-[#39FF14]"
-                        : "bg-[#2A2A2A]"
-                    }`}
+                    onClick={() => setTestimonialIndex(index)}
+                    className="w-2 h-2 rounded-full transition-all"
+                    style={{ 
+                      backgroundColor: index === testimonialIndex ? '#39FF14' : '#888888',
+                      transform: index === testimonialIndex ? 'scale(1.5)' : 'scale(1)'
+                    }}
                     aria-label={`Go to testimonial ${index + 1}`}
                   />
                 ))}
               </div>
-              <button
-                onClick={nextTestimonial}
-                className="w-12 h-12 rounded-full border border-[#2A2A2A] flex items-center justify-center hover:border-[#39FF14] hover:text-[#39FF14] transition-colors"
-                aria-label="Next testimonial"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
             </div>
+
+            <button
+              onClick={prevTestimonial}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-6 p-3 rounded-full transition-colors"
+              style={{ backgroundColor: '#1A1A1A' }}
+              aria-label="Previous testimonial"
+            >
+              <ChevronLeft size={24} style={{ color: '#39FF14' }} />
+            </button>
+            <button
+              onClick={nextTestimonial}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-6 p-3 rounded-full transition-colors"
+              style={{ backgroundColor: '#1A1A1A' }}
+              aria-label="Next testimonial"
+            >
+              <ChevronRight size={24} style={{ color: '#39FF14' }} />
+            </button>
           </div>
         </div>
       </section>
 
-      {/* CTA Full */}
-      <section className="py-20 lg:py-32 bg-[#0A0A0A] relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#39FF14] blur-[150px]" />
-        </div>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6"
-            style={{ fontFamily: "var(--font-space-grotesk)" }}
-          >
-            Ready to Get <span className="text-[#39FF14]">Fresh</span>?
-          </h2>
-          <p className="text-lg text-[#6B6B6B] mb-10 max-w-2xl mx-auto">
-            Walk ins welcome, but booking ahead guarantees your spot. Join the
-            thousands who trust The Cut Lab for their signature look.
-          </p>
-          <Button
-            asChild
-            size="lg"
-            className="bg-[#39FF14] text-[#0A0A0A] hover:bg-[#39FF14]/90 font-semibold text-lg px-10"
-          >
-            <a href="#contact">Book Your Appointment</a>
-          </Button>
-        </div>
-      </section>
+      {/* Pricing Cards */}
+      <section id="pricing" className="py-24 px-8 md:px-16" style={{ backgroundColor: '#1A1A1A' }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
+              TRANSPARENT PRICING
+            </p>
+            <h2 
+              className="text-4xl md:text-5xl font-bold"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            >
+              Choose Your Experience
+            </h2>
+          </div>
 
-      {/* Contact Split */}
-      <section id="contact" className="py-20 lg:py-32 bg-[#1A1A1A]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
-            <div>
-              <p className="text-[#39FF14] text-sm font-medium uppercase tracking-wider mb-4">
-                Get In Touch
-              </p>
-              <h2
-                className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6"
-                style={{ fontFamily: "var(--font-space-grotesk)" }}
+          <div className="grid md:grid-cols-3 gap-6">
+            {pricingTiers.map((tier) => (
+              <div
+                key={tier.name}
+                className={`p-8 rounded-2xl relative ${tier.featured ? 'scale-105' : ''}`}
+                style={{ 
+                  backgroundColor: '#0A0A0A',
+                  border: tier.featured ? '2px solid #39FF14' : '1px solid #1A1A1A'
+                }}
               >
-                Book Your Visit
-              </h2>
-              <p className="text-[#6B6B6B] mb-8">
-                Ready for a fresh cut? Drop us a message or stop by the shop.
-                Walk ins are welcome but appointments are recommended for
-                guaranteed service.
-              </p>
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-[#39FF14]/10 flex items-center justify-center shrink-0">
-                    <Clock className="w-5 h-5 text-[#39FF14]" />
-                  </div>
-                  <div>
-                    <p className="font-bold mb-1">Hours</p>
-                    <p className="text-[#6B6B6B]">Contact us for current hours</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-[#39FF14]/10 flex items-center justify-center shrink-0">
-                    <MapPin className="w-5 h-5 text-[#39FF14]" />
-                  </div>
-                  <div>
-                    <p className="font-bold mb-1">Location</p>
-                    <p className="text-[#6B6B6B]">Contact us for directions</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-[#39FF14]/10 flex items-center justify-center shrink-0">
-                    <Instagram className="w-5 h-5 text-[#39FF14]" />
-                  </div>
-                  <div>
-                    <p className="font-bold mb-1">Follow Us</p>
-                    <p className="text-[#6B6B6B]">@thecutlab</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <form className="bg-[#0A0A0A] border border-[#2A2A2A] rounded-2xl p-8">
-                <h3 className="text-xl font-bold mb-6">Send a Message</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-medium mb-2"
-                    >
-                      Name
-                    </label>
-                    <Input
-                      id="name"
-                      placeholder="Your name"
-                      className="bg-[#1A1A1A] border-[#2A2A2A] focus:border-[#39FF14] focus:ring-[#39FF14]"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium mb-2"
-                    >
-                      Email
-                    </label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="your@email.com"
-                      className="bg-[#1A1A1A] border-[#2A2A2A] focus:border-[#39FF14] focus:ring-[#39FF14]"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className="block text-sm font-medium mb-2"
-                    >
-                      Message
-                    </label>
-                    <Textarea
-                      id="message"
-                      placeholder="How can we help?"
-                      rows={4}
-                      className="bg-[#1A1A1A] border-[#2A2A2A] focus:border-[#39FF14] focus:ring-[#39FF14]"
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full bg-[#39FF14] text-[#0A0A0A] hover:bg-[#39FF14]/90 font-semibold"
+                {tier.featured && (
+                  <div 
+                    className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 text-xs font-bold rounded-full"
+                    style={{ backgroundColor: '#39FF14', color: '#0A0A0A' }}
                   >
-                    Send Message
-                  </Button>
-                </div>
-              </form>
-            </div>
+                    MOST POPULAR
+                  </div>
+                )}
+                <h3 
+                  className="text-2xl font-bold mb-2"
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                >
+                  {tier.name}
+                </h3>
+                <p className="text-3xl font-bold mb-6" style={{ color: '#39FF14' }}>
+                  {tier.price}
+                </p>
+                <ul className="space-y-3 mb-8">
+                  {tier.services.map((service) => (
+                    <li key={service} className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#39FF14' }} />
+                      <span style={{ color: '#888888' }}>{service}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href="#booking"
+                  className="block text-center py-3 rounded-full font-bold transition-all hover:scale-105"
+                  style={{ 
+                    backgroundColor: tier.featured ? '#39FF14' : 'transparent',
+                    color: tier.featured ? '#0A0A0A' : '#FFFFFF',
+                    border: tier.featured ? 'none' : '1px solid #FFFFFF'
+                  }}
+                >
+                  Book Now
+                </a>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 bg-[#0A0A0A] border-t border-[#2A2A2A]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            <div className="sm:col-span-2 lg:col-span-1">
-              <a
-                href="#"
-                className="flex items-center gap-2 font-bold text-xl tracking-tight mb-4"
-                style={{ fontFamily: "var(--font-space-grotesk)" }}
-              >
-                <Scissors className="w-6 h-6 text-[#39FF14]" />
-                <span>
-                  THE CUT <span className="text-[#39FF14]">LAB</span>
-                </span>
-              </a>
-              <p className="text-[#6B6B6B] text-sm">
-                Premium urban grooming for the modern gentleman. Where precision
-                meets style.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                {navLinks.map((link) => (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      className="text-[#6B6B6B] hover:text-white transition-colors text-sm"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Services</h4>
-              <ul className="space-y-2">
-                {services.slice(0, 4).map((service, index) => (
-                  <li key={index}>
-                    <a
-                      href="#services"
-                      className="text-[#6B6B6B] hover:text-white transition-colors text-sm"
-                    >
-                      {service.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Connect</h4>
-              <div className="flex gap-4">
-                <a
-                  href="mailto:contact@thecutlab.com"
-                  className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center hover:bg-[#39FF14] hover:text-[#0A0A0A] transition-colors"
-                  aria-label="Email us"
+      {/* Booking Form */}
+      <section id="booking" className="py-24 px-8 md:px-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
+              READY FOR YOUR TRANSFORMATION?
+            </p>
+            <h2 
+              className="text-4xl md:text-5xl font-bold"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            >
+              Book Your Appointment
+            </h2>
+          </div>
+
+          <form 
+            onSubmit={handleSubmit}
+            className="p-8 md:p-12 rounded-2xl"
+            style={{ backgroundColor: '#1A1A1A' }}
+          >
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium mb-2">Your Name</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all"
+                  style={{ 
+                    backgroundColor: '#0A0A0A', 
+                    border: '1px solid #888888',
+                    color: '#FFFFFF'
+                  }}
+                  placeholder="John Doe"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Email</label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all"
+                  style={{ 
+                    backgroundColor: '#0A0A0A', 
+                    border: '1px solid #888888',
+                    color: '#FFFFFF'
+                  }}
+                  placeholder="john@example.com"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Phone</label>
+                <input
+                  type="tel"
+                  required
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all"
+                  style={{ 
+                    backgroundColor: '#0A0A0A', 
+                    border: '1px solid #888888',
+                    color: '#FFFFFF'
+                  }}
+                  placeholder="Your phone number"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Service</label>
+                <select
+                  required
+                  value={formData.service}
+                  onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all"
+                  style={{ 
+                    backgroundColor: '#0A0A0A', 
+                    border: '1px solid #888888',
+                    color: '#FFFFFF'
+                  }}
                 >
-                  <Mail className="w-5 h-5" />
-                </a>
-                <a
-                  href="tel:+1234567890"
-                  className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center hover:bg-[#39FF14] hover:text-[#0A0A0A] transition-colors"
-                  aria-label="Call us"
+                  <option value="">Select a service</option>
+                  {services.map((service) => (
+                    <option key={service.name} value={service.name}>{service.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Preferred Date</label>
+                <input
+                  type="date"
+                  required
+                  value={formData.date}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all"
+                  style={{ 
+                    backgroundColor: '#0A0A0A', 
+                    border: '1px solid #888888',
+                    color: '#FFFFFF'
+                  }}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Preferred Time</label>
+                <select
+                  required
+                  value={formData.time}
+                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all"
+                  style={{ 
+                    backgroundColor: '#0A0A0A', 
+                    border: '1px solid #888888',
+                    color: '#FFFFFF'
+                  }}
                 >
-                  <Phone className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://instagram.com/thecutlab"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center hover:bg-[#39FF14] hover:text-[#0A0A0A] transition-colors"
-                  aria-label="Follow on Instagram"
-                >
-                  <Instagram className="w-5 h-5" />
-                </a>
+                  <option value="">Select a time</option>
+                  <option value="9:00 AM">9:00 AM</option>
+                  <option value="10:00 AM">10:00 AM</option>
+                  <option value="11:00 AM">11:00 AM</option>
+                  <option value="12:00 PM">12:00 PM</option>
+                  <option value="1:00 PM">1:00 PM</option>
+                  <option value="2:00 PM">2:00 PM</option>
+                  <option value="3:00 PM">3:00 PM</option>
+                  <option value="4:00 PM">4:00 PM</option>
+                  <option value="5:00 PM">5:00 PM</option>
+                  <option value="6:00 PM">6:00 PM</option>
+                </select>
               </div>
             </div>
-          </div>
-          <div className="pt-8 border-t border-[#2A2A2A] flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-[#6B6B6B] text-sm">
-              &copy; {new Date().getFullYear()} The Cut Lab. All rights reserved.
-            </p>
-            <p className="text-[#6B6B6B] text-sm">
-              Premium Urban Grooming
-            </p>
-          </div>
-        </div>
-      </footer>
-    </main>
-  );
-}
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2">Additional Notes (Optional)</label>
+              <textarea
+                value={formData.notes}
+                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                rows={3}
+                className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all resize-none"
+                style={{ 
+                  backgroundColor: '#0A0A0A', 
+                  border: '1px solid #888888',
+                  color: '#FFFFFF'
+                }}
+                placeholder="Any specific requests or style references..."
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full py-4 rounded-full font-bold text-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
+              style={{ backgroundColor: '#39FF14', color: '#0A0A0A'
