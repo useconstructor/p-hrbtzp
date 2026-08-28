@@ -642,4 +642,181 @@ export default function HomePage() {
             <button
               type="submit"
               className="w-full py-4 rounded-full font-bold text-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
-              style={{ backgroundColor: '#39FF14', color: '#0A0A0A'
+              style={{ backgroundColor: '#39FF14', color: '#0A0A0A' }}
+            >
+              <Calendar size={20} />
+              Confirm Booking
+            </button>
+          </form>
+        </div>
+      </section>
+
+      {/* Locations Map */}
+      <section id="locations" className="py-24 px-8 md:px-16" style={{ backgroundColor: '#1A1A1A' }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
+              FIND US
+            </p>
+            <h2
+              className="text-4xl md:text-5xl font-bold"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            >
+              Visit Our Studio
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div
+              className="h-[400px] rounded-2xl flex items-center justify-center"
+              style={{ backgroundColor: '#0A0A0A', border: '1px solid #1A1A1A' }}
+            >
+              <div className="text-center p-8">
+                <MapPin size={48} style={{ color: '#39FF14' }} className="mx-auto mb-4" />
+                <p className="text-lg mb-2">Use the contact form to request our location</p>
+                <p style={{ color: '#888888' }}>We will send you directions to our studio</p>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div
+                className="p-6 rounded-xl"
+                style={{ backgroundColor: '#0A0A0A' }}
+              >
+                <h3 className="text-xl font-bold mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                  Studio Hours
+                </h3>
+                <div className="space-y-2" style={{ color: '#888888' }}>
+                  <div className="flex justify-between">
+                    <span>Monday - Friday</span>
+                    <span style={{ color: '#FFFFFF' }}>9:00 AM - 7:00 PM</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Saturday</span>
+                    <span style={{ color: '#FFFFFF' }}>9:00 AM - 6:00 PM</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Sunday</span>
+                    <span style={{ color: '#FFFFFF' }}>10:00 AM - 4:00 PM</span>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="p-6 rounded-xl"
+                style={{ backgroundColor: '#0A0A0A' }}
+              >
+                <h3 className="text-xl font-bold mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                  Get In Touch
+                </h3>
+                <div className="space-y-3">
+                  <a
+                    href="#booking"
+                    className="flex items-center gap-3 transition-colors hover:opacity-80"
+                    style={{ color: '#888888' }}
+                  >
+                    <Mail size={20} style={{ color: '#39FF14' }} />
+                    <span>Use the booking form above</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-16 px-8 md:px-16" style={{ backgroundColor: '#0A0A0A', borderTop: '1px solid #1A1A1A' }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
+            <div className="md:col-span-2">
+              <a href="#" className="text-3xl font-bold tracking-tight" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                EDGE<span style={{ color: '#39FF14' }}>.</span>STUDIO
+              </a>
+              <p className="mt-4 max-w-md" style={{ color: '#888888' }}>
+                Premium grooming experience where precision meets personality. Walk in with expectations, leave with confidence.
+              </p>
+              <div className="flex gap-4 mt-6">
+                <a
+                  href="#"
+                  className="p-3 rounded-full transition-all hover:scale-110"
+                  style={{ backgroundColor: '#1A1A1A' }}
+                  aria-label="Instagram"
+                >
+                  <Instagram size={20} style={{ color: '#39FF14' }} />
+                </a>
+                <a
+                  href="#"
+                  className="p-3 rounded-full transition-all hover:scale-110"
+                  style={{ backgroundColor: '#1A1A1A' }}
+                  aria-label="Facebook"
+                >
+                  <Facebook size={20} style={{ color: '#39FF14' }} />
+                </a>
+                <a
+                  href="#"
+                  className="p-3 rounded-full transition-all hover:scale-110"
+                  style={{ backgroundColor: '#1A1A1A' }}
+                  aria-label="Twitter"
+                >
+                  <Twitter size={20} style={{ color: '#39FF14' }} />
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-bold mb-4" style={{ color: '#FFFFFF' }}>Quick Links</h4>
+              <ul className="space-y-2">
+                {navLinks.slice(0, 4).map((link) => (
+                  <li key={link.name}>
+                    <a
+                      href={link.href}
+                      className="transition-colors hover:opacity-100"
+                      style={{ color: '#888888' }}
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-bold mb-4" style={{ color: '#FFFFFF' }}>Services</h4>
+              <ul className="space-y-2">
+                {services.map((service) => (
+                  <li key={service.name}>
+                    <a
+                      href="#services"
+                      className="transition-colors hover:opacity-100"
+                      style={{ color: '#888888' }}
+                    >
+                      {service.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div
+            className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+            style={{ borderTop: '1px solid #1A1A1A' }}
+          >
+            <p style={{ color: '#888888' }}>
+              © {new Date().getFullYear()} Edge Studio. All rights reserved.
+            </p>
+            <div className="flex gap-6">
+              <a href="#" className="text-sm transition-colors hover:opacity-100" style={{ color: '#888888' }}>
+                Privacy Policy
+              </a>
+              <a href="#" className="text-sm transition-colors hover:opacity-100" style={{ color: '#888888' }}>
+                Terms of Service
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+  )
+}
