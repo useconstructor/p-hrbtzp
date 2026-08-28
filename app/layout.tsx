@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Project 1787937741909',
-  description: 'A promotional banner component that sticks to the top of the page, featuring a special offer for new clients with a neon green call-to-action button and dismiss functionality.',
+  description: 'Adding a work gallery section to showcase 6 recent haircuts in a grid layout with hover effects revealing style details, maintaining the black and neon green barbershop aesthetic.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

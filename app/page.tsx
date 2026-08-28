@@ -2,818 +2,764 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { X, Menu, Scissors, Clock, MapPin, Star, ChevronLeft, ChevronRight, Phone, Mail, Instagram, Facebook, Twitter, Sparkles, Users, Award, Calendar } from 'lucide-react'
+import { Menu, X, Scissors, Clock, Star, ChevronLeft, ChevronRight, Instagram, Facebook, MapPin, Phone, Mail, Zap, Crown, Sparkles } from 'lucide-react'
 
 export default function HomePage() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
-  const [promoDismissed, setPromoDismissed] = useState(false)
-  const [testimonialIndex, setTestimonialIndex] = useState(0)
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    service: '',
-    date: '',
-    time: '',
-    notes: ''
-  })
+  const [currentTestimonial, setCurrentTestimonial] = useState(0)
+
+  const navLinks = [
+    { name: 'Inicio', href: '#hero' },
+    { name: 'Servicios', href: '#services' },
+    { name: 'Galería', href: '#gallery' },
+    { name: 'Nosotros', href: '#about' },
+    { name: 'Opiniones', href: '#testimonials' },
+    { name: 'Contacto', href: '#contact' },
+  ]
 
   const services = [
-    { name: 'Classic Fade', description: 'Precision fade with clean lines and sharp edges', duration: '45 min', icon: Scissors },
-    { name: 'Beard Sculpt', description: 'Expert beard shaping and grooming with hot towel finish', duration: '30 min', icon: Sparkles },
-    { name: 'The Full Experience', description: 'Haircut, beard trim, and signature scalp massage', duration: '90 min', icon: Award },
-    { name: 'Kids Cut', description: 'Patient and precise cuts for the young ones', duration: '30 min', icon: Users },
+    {
+      icon: Scissors,
+      title: 'Corte Clásico',
+      description: 'El corte tradicional perfeccionado con técnicas modernas. Incluye lavado y estilizado.',
+      features: ['Consulta de estilo', 'Lavado premium', 'Acabado con producto']
+    },
+    {
+      icon: Crown,
+      title: 'Fade Premium',
+      description: 'Degradados impecables desde skin fade hasta mid fade. Arte en cada transición.',
+      features: ['Degradado personalizado', 'Línea de diseño', 'Retoque de cejas']
+    },
+    {
+      icon: Sparkles,
+      title: 'Barba Sculpt',
+      description: 'Perfilado y diseño de barba con navaja caliente. Experiencia completa de grooming.',
+      features: ['Toalla caliente', 'Aceite nutritivo', 'Perfilado preciso']
+    },
+    {
+      icon: Zap,
+      title: 'Combo Elite',
+      description: 'Corte completo más barba. El pack definitivo para el hombre que exige lo mejor.',
+      features: ['Corte a elección', 'Barba completa', 'Tratamiento capilar']
+    },
+  ]
+
+  const galleryItems = [
+    { image: '/images/hero.png', style: 'Low Fade Texturizado', barber: 'Barber Senior' },
+    { image: '/images/feature.png', style: 'Buzz Cut Clean', barber: 'Barber Junior' },
+    { image: '/images/hero.png', style: 'Pompadour Moderno', barber: 'Barber Senior' },
+    { image: '/images/feature.png', style: 'High Skin Fade', barber: 'Master Barber' },
+    { image: '/images/hero.png', style: 'Crop Top French', barber: 'Barber Senior' },
+    { image: '/images/feature.png', style: 'Mullet Contemporáneo', barber: 'Master Barber' },
   ]
 
   const testimonials = [
-    { text: "Best barbershop in the city. The attention to detail is unmatched. I have been coming here for two years and never looked back.", rating: 5 },
-    { text: "Finally found a place that gets my style. The vibe is incredible and the cuts are even better. Highly recommend the Full Experience.", rating: 5 },
-    { text: "Clean shop, skilled barbers, great music. What more could you ask for? My go to spot every two weeks.", rating: 5 },
-    { text: "The team here actually listens to what you want. Left feeling like a new man. Will definitely be back.", rating: 5 },
+    {
+      text: 'El mejor fade que me han hecho en la vida. El ambiente es increíble y el servicio de primera. Ya encontré mi barbería de confianza.',
+      rating: 5,
+      role: 'Cliente frecuente'
+    },
+    {
+      text: 'Atención personalizada desde que entras. Te asesoran sobre qué estilo te queda mejor y el resultado siempre supera las expectativas.',
+      rating: 5,
+      role: 'Cliente desde 2023'
+    },
+    {
+      text: 'Profesionales de verdad. El tratamiento de barba con toalla caliente es una experiencia que todo hombre debería probar.',
+      rating: 5,
+      role: 'Cliente nuevo'
+    },
   ]
-
-  const pricingTiers = [
-    { name: 'Essential', services: ['Classic Haircut', 'Neck Cleanup', 'Style Finish'], price: 'From $35' },
-    { name: 'Premium', services: ['Fade of Choice', 'Beard Line Up', 'Hot Towel', 'Product Styling'], price: 'From $55', featured: true },
-    { name: 'VIP', services: ['The Full Experience', 'Scalp Treatment', 'Complimentary Beverage', 'Priority Booking'], price: 'From $85' },
-  ]
-
-  const galleryImages = [
-    { src: '/images/hero.png', alt: 'Precision fade haircut' },
-    { src: '/images/feature.png', alt: 'Beard grooming session' },
-    { src: '/images/hero.png', alt: 'Modern barbershop interior' },
-    { src: '/images/feature.png', alt: 'Client transformation' },
-    { src: '/images/hero.png', alt: 'Detailed line work' },
-    { src: '/images/feature.png', alt: 'Premium styling products' },
-  ]
-
-  const navLinks = [
-    { name: 'Services', href: '#services' },
-    { name: 'About', href: '#about' },
-    { name: 'Gallery', href: '#gallery' },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'Book Now', href: '#booking' },
-    { name: 'Locations', href: '#locations' },
-  ]
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    alert('Booking request submitted! We will contact you shortly to confirm.')
-  }
 
   const nextTestimonial = () => {
-    setTestimonialIndex((prev) => (prev + 1) % testimonials.length)
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
   }
 
   const prevTestimonial = () => {
-    setTestimonialIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)
   }
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF' }}>
-      {/* Promo Banner */}
-      {!promoDismissed && (
-        <div 
-          className="sticky top-0 z-50 py-3 px-4 flex items-center justify-center gap-4 relative"
-          style={{ backgroundColor: '#1A1A1A', borderBottom: '1px solid #39FF14' }}
-        >
-          <p className="text-sm md:text-base font-medium text-center">
-            <span style={{ color: '#39FF14' }}>★</span> First cut FREE for new clients
-          </p>
-          <a
-            href="#booking"
-            className="px-4 py-1.5 text-sm font-bold rounded-full transition-all hover:scale-105"
-            style={{ backgroundColor: '#39FF14', color: '#0A0A0A' }}
-          >
-            Book Now
-          </a>
-          <button
-            onClick={() => setPromoDismissed(true)}
-            className="absolute right-4 p-1 hover:opacity-70 transition-opacity"
-            aria-label="Dismiss promo"
-          >
-            <X size={18} style={{ color: '#888888' }} />
-          </button>
-        </div>
-      )}
-
       {/* Sticky Navigation */}
-      <nav 
-        className={`sticky ${promoDismissed ? 'top-0' : 'top-[52px]'} z-40 py-4 px-6 md:px-12 transition-all`}
-        style={{ backgroundColor: '#0A0A0A', borderBottom: '1px solid #1A1A1A' }}
-      >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <a href="#" className="text-2xl font-bold tracking-tight" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-            EDGE<span style={{ color: '#39FF14' }}>.</span>STUDIO
-          </a>
+      <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style={{ backgroundColor: 'rgba(10, 10, 10, 0.95)', backdropFilter: 'blur(10px)' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            {/* Logo */}
+            <a href="#hero" className="flex items-center gap-2 group">
+              <Scissors className="w-8 h-8 transition-transform duration-300 group-hover:rotate-45" style={{ color: '#39FF14' }} />
+              <span className="text-2xl font-bold tracking-wider" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
+                SHARP<span style={{ color: '#39FF14' }}>CUT</span>
+              </span>
+            </a>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-sm font-medium tracking-wide transition-colors duration-300 hover:text-[#39FF14]"
+                  style={{ fontFamily: 'Inter, sans-serif', color: '#FFFFFF' }}
+                >
+                  {link.name}
+                </a>
+              ))}
               <a
-                key={link.name}
-                href={link.href}
-                className="text-sm font-medium hover:opacity-100 transition-opacity"
-                style={{ color: link.name === 'Book Now' ? '#39FF14' : '#FFFFFF', opacity: link.name === 'Book Now' ? 1 : 0.8 }}
+                href="#contact"
+                className="px-6 py-3 text-sm font-bold tracking-wider transition-all duration-300 hover:scale-105"
+                style={{ 
+                  backgroundColor: '#39FF14', 
+                  color: '#0A0A0A',
+                  fontFamily: 'Bebas Neue, sans-serif'
+                }}
               >
-                {link.name}
+                RESERVAR CITA
               </a>
-            ))}
-          </div>
+            </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileNavOpen(!mobileNavOpen)}
-            className="md:hidden p-2"
-            aria-label="Toggle menu"
-          >
-            <Menu size={24} style={{ color: '#39FF14' }} />
-          </button>
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileNavOpen(!mobileNavOpen)}
+              className="lg:hidden p-2 transition-colors duration-300"
+              style={{ color: '#39FF14' }}
+              aria-label="Toggle menu"
+            >
+              {mobileNavOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile Nav */}
+        {/* Mobile Navigation */}
         <div
-          className={`md:hidden overflow-hidden transition-all duration-500 ${
-            mobileNavOpen ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
+          className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${
+            mobileNavOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
           }`}
+          style={{ backgroundColor: '#1A1A1A' }}
         >
-          <div className="flex flex-col gap-4 py-4">
+          <div className="px-4 py-6 space-y-4">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileNavOpen(false)}
-                className="text-lg font-medium py-2 border-b transition-colors"
-                style={{ 
-                  color: link.name === 'Book Now' ? '#39FF14' : '#FFFFFF',
-                  borderColor: '#1A1A1A'
-                }}
+                className="block py-3 text-lg font-medium tracking-wide border-b transition-colors duration-300 hover:text-[#39FF14]"
+                style={{ borderColor: '#333', fontFamily: 'Inter, sans-serif' }}
               >
                 {link.name}
               </a>
             ))}
+            <a
+              href="#contact"
+              onClick={() => setMobileNavOpen(false)}
+              className="block w-full py-4 text-center text-lg font-bold tracking-wider mt-4"
+              style={{ 
+                backgroundColor: '#39FF14', 
+                color: '#0A0A0A',
+                fontFamily: 'Bebas Neue, sans-serif'
+              }}
+            >
+              RESERVAR CITA
+            </a>
           </div>
         </div>
       </nav>
 
-      {/* Hero Split */}
-      <section className="min-h-[90vh] grid md:grid-cols-2 gap-0">
-        <div className="flex flex-col justify-center px-8 md:px-16 py-16 md:py-0 order-2 md:order-1">
-          <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
-            PREMIUM GROOMING EXPERIENCE
-          </p>
-          <h1 
-            className="text-5xl md:text-7xl font-bold leading-tight mb-6"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
-            Sharp Cuts.
-            <br />
-            <span style={{ color: '#39FF14' }}>Bold Style.</span>
-          </h1>
-          <p className="text-lg mb-8 max-w-md" style={{ color: '#888888' }}>
-            Where precision meets personality. Step into our studio and leave looking like the best version of yourself.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a
-              href="#booking"
-              className="px-8 py-4 text-center font-bold text-lg rounded-full transition-all hover:scale-105 hover:shadow-lg"
-              style={{ backgroundColor: '#39FF14', color: '#0A0A0A' }}
-            >
-              Book Your Slot
-            </a>
-            <a
-              href="#services"
-              className="px-8 py-4 text-center font-bold text-lg rounded-full border-2 transition-all hover:bg-white hover:text-black"
-              style={{ borderColor: '#FFFFFF' }}
-            >
-              View Services
-            </a>
-          </div>
-        </div>
-        <div className="relative min-h-[400px] md:min-h-full order-1 md:order-2">
-          <Image
-            src="/images/hero.png"
-            alt="Premium barbershop experience"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div 
-            className="absolute inset-0"
-            style={{ background: 'linear-gradient(to right, #0A0A0A 0%, transparent 30%)' }}
-          />
-        </div>
-      </section>
-
-      {/* Services Cards */}
-      <section id="services" className="py-24 px-8 md:px-16" style={{ backgroundColor: '#1A1A1A' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
-              WHAT WE OFFER
-            </p>
-            <h2 
-              className="text-4xl md:text-5xl font-bold"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              Our Services
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {services.map((service, index) => (
-              <div
-                key={service.name}
-                className="group p-8 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer relative overflow-hidden"
-                style={{ backgroundColor: '#0A0A0A', border: '1px solid #1A1A1A' }}
+      {/* Hero Split Section */}
+      <section id="hero" className="min-h-screen pt-20 flex items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-0 items-center">
+            {/* Left Content */}
+            <div className="order-2 lg:order-1 text-center lg:text-left">
+              <div className="inline-block px-4 py-2 mb-6" style={{ backgroundColor: '#1A1A1A', border: '1px solid #39FF14' }}>
+                <span className="text-sm font-medium tracking-widest" style={{ color: '#39FF14', fontFamily: 'Inter, sans-serif' }}>
+                  BARBERÍA URBANA
+                </span>
+              </div>
+              <h1 
+                className="text-5xl sm:text-6xl lg:text-8xl font-bold leading-none mb-6"
+                style={{ fontFamily: 'Bebas Neue, sans-serif' }}
               >
-                <div 
-                  className="absolute top-0 left-0 w-1 h-full transition-all group-hover:w-2"
-                  style={{ backgroundColor: '#39FF14' }}
-                />
-                <div className="flex items-start justify-between mb-4">
-                  <service.icon size={32} style={{ color: '#39FF14' }} />
-                  <span className="text-sm" style={{ color: '#888888' }}>
-                    <Clock size={14} className="inline mr-1" />
-                    {service.duration}
-                  </span>
-                </div>
-                <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                  {service.name}
-                </h3>
-                <p style={{ color: '#888888' }}>{service.description}</p>
-                <a 
-                  href="#booking" 
-                  className="inline-block mt-4 text-sm font-medium transition-all group-hover:translate-x-2"
-                  style={{ color: '#39FF14' }}
+                CORTES QUE<br />
+                <span style={{ color: '#39FF14' }}>DEFINEN</span><br />
+                TU ESTILO
+              </h1>
+              <p 
+                className="text-lg sm:text-xl mb-8 max-w-xl mx-auto lg:mx-0"
+                style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}
+              >
+                Donde la tradición barbera se encuentra con la cultura urbana. Fades impecables, ambiente único y profesionales que entienden tu visión.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <a
+                  href="#contact"
+                  className="px-8 py-4 text-lg font-bold tracking-wider transition-all duration-300 hover:scale-105 text-center"
+                  style={{ 
+                    backgroundColor: '#39FF14', 
+                    color: '#0A0A0A',
+                    fontFamily: 'Bebas Neue, sans-serif'
+                  }}
                 >
-                  Book this service →
+                  AGENDA TU CITA
+                </a>
+                <a
+                  href="#gallery"
+                  className="px-8 py-4 text-lg font-bold tracking-wider transition-all duration-300 hover:bg-white hover:text-black text-center"
+                  style={{ 
+                    border: '2px solid #FFFFFF',
+                    fontFamily: 'Bebas Neue, sans-serif'
+                  }}
+                >
+                  VER TRABAJOS
                 </a>
               </div>
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-8 mt-12 pt-8" style={{ borderTop: '1px solid #333' }}>
+                <div>
+                  <div className="text-3xl sm:text-4xl font-bold" style={{ color: '#39FF14', fontFamily: 'Bebas Neue, sans-serif' }}>5K+</div>
+                  <div className="text-sm" style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}>Cortes realizados</div>
+                </div>
+                <div>
+                  <div className="text-3xl sm:text-4xl font-bold" style={{ color: '#39FF14', fontFamily: 'Bebas Neue, sans-serif' }}>4.9</div>
+                  <div className="text-sm" style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}>Rating promedio</div>
+                </div>
+                <div>
+                  <div className="text-3xl sm:text-4xl font-bold" style={{ color: '#39FF14', fontFamily: 'Bebas Neue, sans-serif' }}>3+</div>
+                  <div className="text-sm" style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}>Años de experiencia</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Image */}
+            <div className="order-1 lg:order-2 relative">
+              <div className="relative aspect-[4/5] max-w-lg mx-auto lg:ml-auto">
+                <div 
+                  className="absolute inset-0 translate-x-4 translate-y-4"
+                  style={{ border: '3px solid #39FF14' }}
+                />
+                <div className="relative h-full w-full overflow-hidden">
+                  <Image
+                    src="/images/hero.png"
+                    alt="Expert barber showcasing precision haircut"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                  <div 
+                    className="absolute inset-0"
+                    style={{ background: 'linear-gradient(to top, rgba(10,10,10,0.8) 0%, transparent 50%)' }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Cards Section */}
+      <section id="services" className="py-24 lg:py-32" style={{ backgroundColor: '#1A1A1A' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <span 
+              className="inline-block text-sm font-medium tracking-widest mb-4"
+              style={{ color: '#39FF14', fontFamily: 'Inter, sans-serif' }}
+            >
+              NUESTROS SERVICIOS
+            </span>
+            <h2 
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6"
+              style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+            >
+              DOMINA TU <span style={{ color: '#39FF14' }}>LOOK</span>
+            </h2>
+            <p 
+              className="text-lg max-w-2xl mx-auto"
+              style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}
+            >
+              Cada servicio está diseñado para ofrecerte una experiencia premium. Técnica, estilo y atención personalizada en cada visita.
+            </p>
+          </div>
+
+          {/* Services Grid */}
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+            {services.map((service, index) => (
+              <div
+                key={index}
+                className="group relative p-8 lg:p-10 transition-all duration-500 hover:-translate-y-2"
+                style={{ 
+                  backgroundColor: '#0A0A0A',
+                  border: '1px solid #333'
+                }}
+              >
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ border: '2px solid #39FF14' }}
+                />
+                <service.icon 
+                  className="w-12 h-12 mb-6 transition-transform duration-300 group-hover:scale-110"
+                  style={{ color: '#39FF14' }}
+                />
+                <h3 
+                  className="text-2xl lg:text-3xl font-bold mb-4"
+                  style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+                >
+                  {service.title}
+                </h3>
+                <p 
+                  className="mb-6"
+                  style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}
+                >
+                  {service.description}
+                </p>
+                <ul className="space-y-2">
+                  {service.features.map((feature, idx) => (
+                    <li 
+                      key={idx}
+                      className="flex items-center gap-2 text-sm"
+                      style={{ fontFamily: 'Inter, sans-serif' }}
+                    >
+                      <span className="w-1.5 h-1.5" style={{ backgroundColor: '#39FF14' }} />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* About Split */}
-      <section id="about" className="py-24 px-8 md:px-16">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div className="relative h-[500px] rounded-2xl overflow-hidden">
-            <Image
-              src="/images/feature.png"
-              alt="Our barbershop team"
-              fill
-              className="object-cover"
-            />
-            <div 
-              className="absolute bottom-6 left-6 right-6 p-6 rounded-xl backdrop-blur-md"
-              style={{ backgroundColor: 'rgba(26, 26, 26, 0.9)' }}
+          {/* CTA */}
+          <div className="text-center mt-12">
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 text-lg font-medium transition-colors duration-300"
+              style={{ color: '#39FF14', fontFamily: 'Inter, sans-serif' }}
             >
-              <div className="flex items-center gap-6">
-                <div className="text-center">
-                  <p className="text-3xl font-bold" style={{ color: '#39FF14' }}>5+</p>
-                  <p className="text-xs" style={{ color: '#888888' }}>Years</p>
-                </div>
-                <div className="w-px h-12" style={{ backgroundColor: '#888888' }} />
-                <div className="text-center">
-                  <p className="text-3xl font-bold" style={{ color: '#39FF14' }}>10K+</p>
-                  <p className="text-xs" style={{ color: '#888888' }}>Clients</p>
-                </div>
-                <div className="w-px h-12" style={{ backgroundColor: '#888888' }} />
-                <div className="text-center">
-                  <p className="text-3xl font-bold" style={{ color: '#39FF14' }}>4.9</p>
-                  <p className="text-xs" style={{ color: '#888888' }}>Rating</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
-              OUR STORY
-            </p>
-            <h2 
-              className="text-4xl md:text-5xl font-bold mb-6"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              More Than Just a Haircut
-            </h2>
-            <p className="text-lg mb-6" style={{ color: '#888888' }}>
-              Edge Studio was born from a simple belief: everyone deserves to feel confident when they walk out the door. We combine classic barbering techniques with modern style to create looks that are uniquely you.
-            </p>
-            <p className="text-lg mb-8" style={{ color: '#888888' }}>
-              Our team of skilled barbers brings together years of experience with fresh, contemporary vision. We stay ahead of trends while respecting timeless techniques that never go out of style.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#39FF14' }} />
-                <span>Premium Products</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#39FF14' }} />
-                <span>Skilled Barbers</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#39FF14' }} />
-                <span>Clean Environment</span>
-              </div>
-            </div>
+              Consulta precios y disponibilidad
+              <ChevronRight className="w-5 h-5" />
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Gallery Grid */}
-      <section id="gallery" className="py-24 px-8 md:px-16" style={{ backgroundColor: '#1A1A1A' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
-              OUR WORK
-            </p>
-            <h2 
-              className="text-4xl md:text-5xl font-bold"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+      {/* Gallery Grid Section */}
+      <section id="gallery" className="py-24 lg:py-32" style={{ backgroundColor: '#0A0A0A' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16">
+            <div>
+              <span 
+                className="inline-block text-sm font-medium tracking-widest mb-4"
+                style={{ color: '#39FF14', fontFamily: 'Inter, sans-serif' }}
+              >
+                PORTFOLIO
+              </span>
+              <h2 
+                className="text-4xl sm:text-5xl lg:text-6xl font-bold"
+                style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+              >
+                TRABAJOS <span style={{ color: '#39FF14' }}>RECIENTES</span>
+              </h2>
+            </div>
+            <p 
+              className="text-lg max-w-md mt-4 lg:mt-0"
+              style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}
             >
-              Gallery
-            </h2>
+              Cada corte cuenta una historia. Mira nuestros trabajos más recientes y encuentra inspiración para tu próximo estilo.
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {galleryImages.map((image, index) => (
-              <div 
-                key={index} 
-                className={`relative overflow-hidden rounded-xl group ${
-                  index === 0 ? 'col-span-2 row-span-2 h-[400px] md:h-[500px]' : 'h-[200px] md:h-[240px]'
-                }`}
+          {/* Gallery Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+            {galleryItems.map((item, index) => (
+              <div
+                key={index}
+                className="group relative aspect-[3/4] overflow-hidden cursor-pointer"
               >
                 <Image
-                  src={image.src}
-                  alt={image.alt}
+                  src={item.image}
+                  alt={item.style}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
+                {/* Overlay */}
                 <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4"
-                  style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' }}
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-4 lg:p-6"
+                  style={{ background: 'linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 50%, transparent 100%)' }}
                 >
-                  <p className="text-sm font-medium">{image.alt}</p>
+                  <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                    <div 
+                      className="w-12 h-0.5 mb-3 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 delay-100"
+                      style={{ backgroundColor: '#39FF14' }}
+                    />
+                    <h3 
+                      className="text-lg lg:text-xl font-bold mb-1"
+                      style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+                    >
+                      {item.style}
+                    </h3>
+                    <p 
+                      className="text-sm"
+                      style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}
+                    >
+                      por {item.barber}
+                    </p>
+                  </div>
                 </div>
+                {/* Corner Accent */}
+                <div 
+                  className="absolute top-0 right-0 w-0 h-0 group-hover:w-12 group-hover:h-12 transition-all duration-300"
+                  style={{ 
+                    borderTop: '2px solid #39FF14',
+                    borderRight: '2px solid #39FF14'
+                  }}
+                />
               </div>
             ))}
+          </div>
+
+          {/* Instagram CTA */}
+          <div className="text-center mt-12">
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 px-8 py-4 text-lg font-bold tracking-wider transition-all duration-300 hover:scale-105"
+              style={{ 
+                border: '2px solid #39FF14',
+                fontFamily: 'Bebas Neue, sans-serif'
+              }}
+            >
+              <Instagram className="w-5 h-5" style={{ color: '#39FF14' }} />
+              VER MÁS EN INSTAGRAM
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Carousel */}
-      <section className="py-24 px-8 md:px-16">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
-              CLIENT REVIEWS
-            </p>
-            <h2 
-              className="text-4xl md:text-5xl font-bold"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+      {/* About Centered Section */}
+      <section id="about" className="py-24 lg:py-32 relative overflow-hidden" style={{ backgroundColor: '#1A1A1A' }}>
+        {/* Background Pattern */}
+        <div 
+          className="absolute inset-0 opacity-5"
+          style={{ 
+            backgroundImage: 'repeating-linear-gradient(45deg, #39FF14 0, #39FF14 1px, transparent 0, transparent 50%)',
+            backgroundSize: '20px 20px'
+          }}
+        />
+        
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="text-center">
+            <span 
+              className="inline-block text-sm font-medium tracking-widest mb-4"
+              style={{ color: '#39FF14', fontFamily: 'Inter, sans-serif' }}
             >
-              What They Say
+              NUESTRA HISTORIA
+            </span>
+            <h2 
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-8"
+              style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+            >
+              MÁS QUE UNA <span style={{ color: '#39FF14' }}>BARBERÍA</span>
+            </h2>
+            
+            <div className="relative my-12">
+              <div 
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 lg:w-40 lg:h-40"
+                style={{ 
+                  border: '3px solid #39FF14',
+                  transform: 'translate(-50%, -50%) rotate(45deg)'
+                }}
+              />
+              <Scissors className="w-16 h-16 lg:w-20 lg:h-20 mx-auto relative z-10" style={{ color: '#39FF14' }} />
+            </div>
+
+            <p 
+              className="text-lg lg:text-xl leading-relaxed mb-8"
+              style={{ color: '#FFFFFF', fontFamily: 'Inter, sans-serif' }}
+            >
+              Nacimos con una visión clara: crear un espacio donde el arte del corte se fusione con la cultura urbana contemporánea. No somos solo barberos, somos artistas que entienden que tu estilo es una extensión de tu personalidad.
+            </p>
+            
+            <p 
+              className="text-lg leading-relaxed mb-12"
+              style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}
+            >
+              Cada silla en nuestro local cuenta historias de transformación. Desde el fade más técnico hasta el corte clásico más elegante, ponemos la misma pasión y dedicación. Porque sabemos que cuando sales de aquí, no solo llevas un corte, llevas confianza.
+            </p>
+
+            {/* Features */}
+            <div className="grid sm:grid-cols-3 gap-8 pt-8" style={{ borderTop: '1px solid #333' }}>
+              <div>
+                <div 
+                  className="text-4xl lg:text-5xl font-bold mb-2"
+                  style={{ color: '#39FF14', fontFamily: 'Bebas Neue, sans-serif' }}
+                >
+                  100%
+                </div>
+                <div style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}>
+                  Satisfacción garantizada
+                </div>
+              </div>
+              <div>
+                <div 
+                  className="text-4xl lg:text-5xl font-bold mb-2"
+                  style={{ color: '#39FF14', fontFamily: 'Bebas Neue, sans-serif' }}
+                >
+                  PRO
+                </div>
+                <div style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}>
+                  Productos premium
+                </div>
+              </div>
+              <div>
+                <div 
+                  className="text-4xl lg:text-5xl font-bold mb-2"
+                  style={{ color: '#39FF14', fontFamily: 'Bebas Neue, sans-serif' }}
+                >
+                  VIP
+                </div>
+                <div style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}>
+                  Experiencia exclusiva
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Carousel Section */}
+      <section id="testimonials" className="py-24 lg:py-32" style={{ backgroundColor: '#0A0A0A' }}>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <span 
+              className="inline-block text-sm font-medium tracking-widest mb-4"
+              style={{ color: '#39FF14', fontFamily: 'Inter, sans-serif' }}
+            >
+              TESTIMONIOS
+            </span>
+            <h2 
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold"
+              style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+            >
+              LO QUE <span style={{ color: '#39FF14' }}>DICEN</span>
             </h2>
           </div>
 
+          {/* Carousel */}
           <div className="relative">
             <div 
-              className="p-8 md:p-12 rounded-2xl text-center"
-              style={{ backgroundColor: '#1A1A1A' }}
+              className="p-8 lg:p-12 text-center"
+              style={{ backgroundColor: '#1A1A1A', border: '1px solid #333' }}
             >
-              <div className="flex justify-center mb-6">
-                {[...Array(testimonials[testimonialIndex].rating)].map((_, i) => (
-                  <Star key={i} size={24} fill="#39FF14" style={{ color: '#39FF14' }} />
+              {/* Quote Mark */}
+              <div 
+                className="text-6xl lg:text-8xl font-bold leading-none mb-6"
+                style={{ color: '#39FF14', fontFamily: 'Bebas Neue, sans-serif', opacity: 0.3 }}
+              >
+                &ldquo;
+              </div>
+              
+              {/* Testimonial Content */}
+              <p 
+                className="text-xl lg:text-2xl mb-8 max-w-3xl mx-auto"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                {testimonials[currentTestimonial].text}
+              </p>
+              
+              {/* Rating */}
+              <div className="flex justify-center gap-1 mb-4">
+                {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-current" style={{ color: '#39FF14' }} />
                 ))}
               </div>
-              <p className="text-xl md:text-2xl mb-8 leading-relaxed">
-                &ldquo;{testimonials[testimonialIndex].text}&rdquo;
-              </p>
-              <div className="flex justify-center gap-2">
+              
+              {/* Author */}
+              <div 
+                className="text-sm font-medium tracking-wide"
+                style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}
+              >
+                {testimonials[currentTestimonial].role}
+              </div>
+            </div>
+
+            {/* Navigation Buttons */}
+            <div className="flex justify-center gap-4 mt-8">
+              <button
+                onClick={prevTestimonial}
+                className="p-3 transition-all duration-300 hover:scale-110"
+                style={{ border: '1px solid #39FF14' }}
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft className="w-6 h-6" style={{ color: '#39FF14' }} />
+              </button>
+              
+              {/* Dots */}
+              <div className="flex items-center gap-2">
                 {testimonials.map((_, index) => (
                   <button
                     key={index}
-                    onClick={() => setTestimonialIndex(index)}
-                    className="w-2 h-2 rounded-full transition-all"
+                    onClick={() => setCurrentTestimonial(index)}
+                    className="w-2 h-2 transition-all duration-300"
                     style={{ 
-                      backgroundColor: index === testimonialIndex ? '#39FF14' : '#888888',
-                      transform: index === testimonialIndex ? 'scale(1.5)' : 'scale(1)'
+                      backgroundColor: index === currentTestimonial ? '#39FF14' : '#333',
+                      transform: index === currentTestimonial ? 'scale(1.5)' : 'scale(1)'
                     }}
                     aria-label={`Go to testimonial ${index + 1}`}
                   />
                 ))}
               </div>
-            </div>
-
-            <button
-              onClick={prevTestimonial}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-6 p-3 rounded-full transition-colors"
-              style={{ backgroundColor: '#1A1A1A' }}
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft size={24} style={{ color: '#39FF14' }} />
-            </button>
-            <button
-              onClick={nextTestimonial}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-6 p-3 rounded-full transition-colors"
-              style={{ backgroundColor: '#1A1A1A' }}
-              aria-label="Next testimonial"
-            >
-              <ChevronRight size={24} style={{ color: '#39FF14' }} />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Cards */}
-      <section id="pricing" className="py-24 px-8 md:px-16" style={{ backgroundColor: '#1A1A1A' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
-              TRANSPARENT PRICING
-            </p>
-            <h2 
-              className="text-4xl md:text-5xl font-bold"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              Choose Your Experience
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {pricingTiers.map((tier) => (
-              <div
-                key={tier.name}
-                className={`p-8 rounded-2xl relative ${tier.featured ? 'scale-105' : ''}`}
-                style={{ 
-                  backgroundColor: '#0A0A0A',
-                  border: tier.featured ? '2px solid #39FF14' : '1px solid #1A1A1A'
-                }}
+              
+              <button
+                onClick={nextTestimonial}
+                className="p-3 transition-all duration-300 hover:scale-110"
+                style={{ border: '1px solid #39FF14' }}
+                aria-label="Next testimonial"
               >
-                {tier.featured && (
-                  <div 
-                    className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 text-xs font-bold rounded-full"
-                    style={{ backgroundColor: '#39FF14', color: '#0A0A0A' }}
-                  >
-                    MOST POPULAR
-                  </div>
-                )}
-                <h3 
-                  className="text-2xl font-bold mb-2"
-                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                >
-                  {tier.name}
-                </h3>
-                <p className="text-3xl font-bold mb-6" style={{ color: '#39FF14' }}>
-                  {tier.price}
-                </p>
-                <ul className="space-y-3 mb-8">
-                  {tier.services.map((service) => (
-                    <li key={service} className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#39FF14' }} />
-                      <span style={{ color: '#888888' }}>{service}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="#booking"
-                  className="block text-center py-3 rounded-full font-bold transition-all hover:scale-105"
-                  style={{ 
-                    backgroundColor: tier.featured ? '#39FF14' : 'transparent',
-                    color: tier.featured ? '#0A0A0A' : '#FFFFFF',
-                    border: tier.featured ? 'none' : '1px solid #FFFFFF'
-                  }}
-                >
-                  Book Now
-                </a>
-              </div>
-            ))}
+                <ChevronRight className="w-6 h-6" style={{ color: '#39FF14' }} />
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Booking Form */}
-      <section id="booking" className="py-24 px-8 md:px-16">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
-              READY FOR YOUR TRANSFORMATION?
-            </p>
-            <h2 
-              className="text-4xl md:text-5xl font-bold"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              Book Your Appointment
-            </h2>
-          </div>
-
-          <form 
-            onSubmit={handleSubmit}
-            className="p-8 md:p-12 rounded-2xl"
-            style={{ backgroundColor: '#1A1A1A' }}
+      {/* CTA Full Section */}
+      <section className="py-24 lg:py-32 relative overflow-hidden">
+        <div 
+          className="absolute inset-0"
+          style={{ 
+            background: 'linear-gradient(135deg, #39FF14 0%, #1A1A1A 50%, #0A0A0A 100%)',
+            opacity: 0.1
+          }}
+        />
+        <div 
+          className="absolute top-0 left-0 w-full h-1"
+          style={{ backgroundColor: '#39FF14' }}
+        />
+        
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+          <h2
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6"
+            style={{ fontFamily: 'Bebas Neue, sans-serif' }}
           >
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
-              <div>
-                <label className="block text-sm font-medium mb-2">Your Name</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                  style={{ 
-                    backgroundColor: '#0A0A0A', 
-                    border: '1px solid #888888',
-                    color: '#FFFFFF'
-                  }}
-                  placeholder="John Doe"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Email</label>
-                <input
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                  style={{ 
-                    backgroundColor: '#0A0A0A', 
-                    border: '1px solid #888888',
-                    color: '#FFFFFF'
-                  }}
-                  placeholder="john@example.com"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Phone</label>
-                <input
-                  type="tel"
-                  required
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                  style={{ 
-                    backgroundColor: '#0A0A0A', 
-                    border: '1px solid #888888',
-                    color: '#FFFFFF'
-                  }}
-                  placeholder="Your phone number"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Service</label>
-                <select
-                  required
-                  value={formData.service}
-                  onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                  style={{ 
-                    backgroundColor: '#0A0A0A', 
-                    border: '1px solid #888888',
-                    color: '#FFFFFF'
-                  }}
-                >
-                  <option value="">Select a service</option>
-                  {services.map((service) => (
-                    <option key={service.name} value={service.name}>{service.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Preferred Date</label>
-                <input
-                  type="date"
-                  required
-                  value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                  style={{ 
-                    backgroundColor: '#0A0A0A', 
-                    border: '1px solid #888888',
-                    color: '#FFFFFF'
-                  }}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Preferred Time</label>
-                <select
-                  required
-                  value={formData.time}
-                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                  style={{ 
-                    backgroundColor: '#0A0A0A', 
-                    border: '1px solid #888888',
-                    color: '#FFFFFF'
-                  }}
-                >
-                  <option value="">Select a time</option>
-                  <option value="9:00 AM">9:00 AM</option>
-                  <option value="10:00 AM">10:00 AM</option>
-                  <option value="11:00 AM">11:00 AM</option>
-                  <option value="12:00 PM">12:00 PM</option>
-                  <option value="1:00 PM">1:00 PM</option>
-                  <option value="2:00 PM">2:00 PM</option>
-                  <option value="3:00 PM">3:00 PM</option>
-                  <option value="4:00 PM">4:00 PM</option>
-                  <option value="5:00 PM">5:00 PM</option>
-                  <option value="6:00 PM">6:00 PM</option>
-                </select>
-              </div>
-            </div>
-            <div className="mb-6">
-              <label className="block text-sm font-medium mb-2">Additional Notes (Optional)</label>
-              <textarea
-                value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                rows={3}
-                className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 transition-all resize-none"
-                style={{ 
-                  backgroundColor: '#0A0A0A', 
-                  border: '1px solid #888888',
-                  color: '#FFFFFF'
-                }}
-                placeholder="Any specific requests or style references..."
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full py-4 rounded-full font-bold text-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
-              style={{ backgroundColor: '#39FF14', color: '#0A0A0A' }}
-            >
-              <Calendar size={20} />
-              Confirm Booking
-            </button>
-          </form>
+            ¿LISTO PARA TU<br />
+            <span style={{ color: '#39FF14' }}>TRANSFORMACIÓN</span>?
+          </h2>
+          <p
+            className="text-lg sm:text-xl mb-10 max-w-2xl mx-auto"
+            style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}
+          >
+            Reserva tu cita hoy y descubre por qué somos la barbería preferida de quienes buscan excelencia. Tu mejor versión te espera.
+          </p>
+          <a
+            href="#contact"
+            className="inline-block px-10 py-5 text-xl font-bold tracking-wider transition-all duration-300 hover:scale-105"
+            style={{
+              backgroundColor: '#39FF14',
+              color: '#0A0A0A',
+              fontFamily: 'Bebas Neue, sans-serif'
+            }}
+          >
+            RESERVAR AHORA
+          </a>
         </div>
       </section>
 
-      {/* Locations Map */}
-      <section id="locations" className="py-24 px-8 md:px-16" style={{ backgroundColor: '#1A1A1A' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-medium tracking-widest mb-4" style={{ color: '#39FF14' }}>
-              FIND US
-            </p>
-            <h2
-              className="text-4xl md:text-5xl font-bold"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              Visit Our Studio
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div
-              className="h-[400px] rounded-2xl flex items-center justify-center"
-              style={{ backgroundColor: '#0A0A0A', border: '1px solid #1A1A1A' }}
-            >
-              <div className="text-center p-8">
-                <MapPin size={48} style={{ color: '#39FF14' }} className="mx-auto mb-4" />
-                <p className="text-lg mb-2">Use the contact form to request our location</p>
-                <p style={{ color: '#888888' }}>We will send you directions to our studio</p>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <div
-                className="p-6 rounded-xl"
-                style={{ backgroundColor: '#0A0A0A' }}
+      {/* Footer / Contact Section */}
+      <footer id="contact" className="py-16 lg:py-24" style={{ backgroundColor: '#0A0A0A' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-12 mb-12">
+            {/* Brand */}
+            <div>
+              <h3
+                className="text-3xl font-bold mb-4"
+                style={{ fontFamily: 'Bebas Neue, sans-serif', color: '#39FF14' }}
               >
-                <h3 className="text-xl font-bold mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                  Studio Hours
-                </h3>
-                <div className="space-y-2" style={{ color: '#888888' }}>
-                  <div className="flex justify-between">
-                    <span>Monday - Friday</span>
-                    <span style={{ color: '#FFFFFF' }}>9:00 AM - 7:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Saturday</span>
-                    <span style={{ color: '#FFFFFF' }}>9:00 AM - 6:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Sunday</span>
-                    <span style={{ color: '#FFFFFF' }}>10:00 AM - 4:00 PM</span>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className="p-6 rounded-xl"
-                style={{ backgroundColor: '#0A0A0A' }}
-              >
-                <h3 className="text-xl font-bold mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                  Get In Touch
-                </h3>
-                <div className="space-y-3">
-                  <a
-                    href="#booking"
-                    className="flex items-center gap-3 transition-colors hover:opacity-80"
-                    style={{ color: '#888888' }}
-                  >
-                    <Mail size={20} style={{ color: '#39FF14' }} />
-                    <span>Use the booking form above</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-16 px-8 md:px-16" style={{ backgroundColor: '#0A0A0A', borderTop: '1px solid #1A1A1A' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
-            <div className="md:col-span-2">
-              <a href="#" className="text-3xl font-bold tracking-tight" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                EDGE<span style={{ color: '#39FF14' }}>.</span>STUDIO
-              </a>
-              <p className="mt-4 max-w-md" style={{ color: '#888888' }}>
-                Premium grooming experience where precision meets personality. Walk in with expectations, leave with confidence.
+                THE CUT LAB
+              </h3>
+              <p style={{ color: '#666666', fontFamily: 'Inter, sans-serif' }}>
+                Donde cada corte es una obra de arte y cada cliente sale sintiéndose su mejor versión.
               </p>
-              <div className="flex gap-4 mt-6">
-                <a
-                  href="#"
-                  className="p-3 rounded-full transition-all hover:scale-110"
-                  style={{ backgroundColor: '#1A1A1A' }}
-                  aria-label="Instagram"
-                >
-                  <Instagram size={20} style={{ color: '#39FF14' }} />
-                </a>
-                <a
-                  href="#"
-                  className="p-3 rounded-full transition-all hover:scale-110"
-                  style={{ backgroundColor: '#1A1A1A' }}
-                  aria-label="Facebook"
-                >
-                  <Facebook size={20} style={{ color: '#39FF14' }} />
-                </a>
-                <a
-                  href="#"
-                  className="p-3 rounded-full transition-all hover:scale-110"
-                  style={{ backgroundColor: '#1A1A1A' }}
-                  aria-label="Twitter"
-                >
-                  <Twitter size={20} style={{ color: '#39FF14' }} />
-                </a>
+            </div>
+
+            {/* Contact Info */}
+            <div>
+              <h4
+                className="text-xl font-bold mb-4"
+                style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+              >
+                CONTACTO
+              </h4>
+              <div className="space-y-3" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <div className="flex items-center gap-3">
+                  <MapPin className="w-5 h-5" style={{ color: '#39FF14' }} />
+                  <span style={{ color: '#666666' }}>Calle Principal 123, Ciudad</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="w-5 h-5" style={{ color: '#39FF14' }} />
+                  <span style={{ color: '#666666' }}>+34 600 123 456</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5" style={{ color: '#39FF14' }} />
+                  <span style={{ color: '#666666' }}>info@thecutlab.com</span>
+                </div>
               </div>
             </div>
 
+            {/* Hours */}
             <div>
-              <h4 className="font-bold mb-4" style={{ color: '#FFFFFF' }}>Quick Links</h4>
-              <ul className="space-y-2">
-                {navLinks.slice(0, 4).map((link) => (
-                  <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="transition-colors hover:opacity-100"
-                      style={{ color: '#888888' }}
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4" style={{ color: '#FFFFFF' }}>Services</h4>
-              <ul className="space-y-2">
-                {services.map((service) => (
-                  <li key={service.name}>
-                    <a
-                      href="#services"
-                      className="transition-colors hover:opacity-100"
-                      style={{ color: '#888888' }}
-                    >
-                      {service.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <h4
+                className="text-xl font-bold mb-4"
+                style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+              >
+                HORARIO
+              </h4>
+              <div className="space-y-2" style={{ fontFamily: 'Inter, sans-serif', color: '#666666' }}>
+                <div className="flex justify-between">
+                  <span>Lun - Vie</span>
+                  <span>10:00 - 20:00</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Sábado</span>
+                  <span>09:00 - 18:00</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Domingo</span>
+                  <span>Cerrado</span>
+                </div>
+              </div>
             </div>
           </div>
 
+          {/* Social & Copyright */}
           <div
-            className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
-            style={{ borderTop: '1px solid #1A1A1A' }}
+            className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4"
+            style={{ borderTop: '1px solid #333' }}
           >
-            <p style={{ color: '#888888' }}>
-              © {new Date().getFullYear()} Edge Studio. All rights reserved.
-            </p>
-            <div className="flex gap-6">
-              <a href="#" className="text-sm transition-colors hover:opacity-100" style={{ color: '#888888' }}>
-                Privacy Policy
+            <div className="flex gap-4">
+              <a
+                href="#"
+                className="p-3 transition-all duration-300 hover:scale-110"
+                style={{ border: '1px solid #39FF14' }}
+                aria-label="Instagram"
+              >
+                <Instagram className="w-5 h-5" style={{ color: '#39FF14' }} />
               </a>
-              <a href="#" className="text-sm transition-colors hover:opacity-100" style={{ color: '#888888' }}>
-                Terms of Service
+              <a
+                href="#"
+                className="p-3 transition-all duration-300 hover:scale-110"
+                style={{ border: '1px solid #39FF14' }}
+                aria-label="Facebook"
+              >
+                <Facebook className="w-5 h-5" style={{ color: '#39FF14' }} />
               </a>
             </div>
+            <p style={{ color: '#666666', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}>
+              © 2024 The Cut Lab. Todos los derechos reservados.
+            </p>
           </div>
         </div>
       </footer>
